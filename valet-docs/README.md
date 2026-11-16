@@ -13,6 +13,7 @@ sh scripts/valet-docs.sh
 
 ```
 estados/                     ciclo de vida do ticket, comum aos cenários
+participantes/               quem participa e por onde entra (APIM xpi, APIM parceiros)
 01-isencao-automatica/       WaitingPayment → Redeemed (isenção automática)
 02-isencao-manual/           WaitingPayment → ManuallyRedeemed (contingência)
 03-pago-outro-meio/          WaitingPayment → PaidByOtherMeans → CustomerExitedValet
@@ -29,6 +30,22 @@ Dentro de cada cenário:
 | `passos/passo-NN.png` | um PNG por passo |
 | `passos/grade.png` | todos os passos numa grade |
 | `passos/completo.png` | tudo visível, sem controles |
+
+## Participantes e o webhook
+
+`participantes/participantes-*` mostra os dois caminhos de entrada:
+- **app:** App XP (mobile) → **APIM xpi** (compartilhado com outros times) → **Loyalty BFF** → Valet API;
+- **parceiro:** Valeti → **APIM parceiros** → Valet API, `POST v1/webhooks/ticket-events`
+  (eventos `vehicleParked` e `ticketDone`).
+
+`participantes/webhook-*` mostra só o webhook. Ele é o **único** endpoint exposto a um
+parceiro e a Valeti é a única cliente dele. Fica no APIM parceiros, não no APIM xpi
+nem no Loyalty BFF: para mudar a exposição dele, o lugar é o APIM parceiros.
+
+## Numeração
+
+A numeração conta a jornada em sequência (1, 2, 3…). Subnível só no desvio
+opcional de pedir o carro (ex.: 9, 9.1, 9.2), para mostrar que é uma ramificação.
 
 ## Como usar no markdown
 
